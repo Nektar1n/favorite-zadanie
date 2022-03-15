@@ -4,7 +4,7 @@
       exit
     </button>
           <h1>ID: {{userDescription.id}}
-          <input type="text" :placeholder="userDescription.first_name" disabled></h1>
+          <input type="text" disabled :value="userDescription.first_name"></h1>
           <h2>{{userDescription.last_name}}</h2>
           <h2>EMAIL: {{userDescription.email}}</h2>
           <img :src="userDescription.avatar" alt="" class="user_description_avatar">
