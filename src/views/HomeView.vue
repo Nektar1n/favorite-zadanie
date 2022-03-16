@@ -51,10 +51,11 @@ export default {
       // userName:'',
       filteredList:[],
       localStorageList:null,
-      revertChange:null
+      revertChange:null,
+      originalListUsers:null
     }
   },
-  computed: mapGetters(['allUsers','allCount']),
+  computed: mapGetters(['allUsers','allCount',]),
   methods:{...mapActions(['fetchUsers']),
     exitDescription(){
       this.showDescription=false
@@ -74,8 +75,9 @@ export default {
       localStorage.setItem('UsersList',JSON.stringify(this.localStorageList))
     },
     updateUsers(){
+      // location.reload ()
       localStorage.setItem('UsersList',JSON.stringify(this.allUsers))
-      this.localStorageList=this.allUsers
+      this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
     },
     // usrChanged(usrDescription){
     //   console.log(usrDescription)
@@ -114,7 +116,7 @@ export default {
   margin-left: 10px;
   padding: 10px;
   transition: all .2s ease;
-  border-radius: 2px;
+  border-radius: 10px;
 }
 .list_item:hover{
   background-color: darkseagreen;
@@ -139,5 +141,13 @@ export default {
 }
 .avatar_item{
   width: 300px;
+  transition:all .4s ease;
+  border-radius: 10px;
+}
+/*.avatar_item:hover{*/
+/*  border-radius: 20px;*/
+/*}*/
+.list_item:hover .avatar_item{
+  border-radius: 200px;
 }
 </style>

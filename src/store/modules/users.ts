@@ -10,7 +10,7 @@ export default {
         },
         allCount(state:any){
             return state.users.length
-        }
+        },
     },
     mutations: {
         updateUsers(state:any,users:any){
