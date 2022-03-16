@@ -5,13 +5,13 @@
     </button>
       <div class="wrapper">
             <input type="text" class="change_input" disabled v-model="usrDescription.id">
-        <hr>
+          <hr>
             <span>First name: </span><input type="text" class="change_input" disabled v-model="usrDescription.first_name">
-        <hr>
+          <hr>
             <span>Last name: </span><input type="text" class="change_input" disabled v-model="usrDescription.last_name">
-        <hr>
+          <hr>
             <span>Email: </span><input type="text" class="change_input email" disabled v-model="usrDescription.email">
-        <hr>
+          <hr>
             <input type="image" :src="usrDescription.avatar" alt="" class="user_description_avatar">
             <div class="change_buttons">
                 <MyButton class="change_buttons_btn" v-if="!showChangeButton" @click="changeDescription">Change data user</MyButton>
