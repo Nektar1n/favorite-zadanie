@@ -3,22 +3,22 @@
     <button class="ext_btn" @click="$emit('exitDescription'),$router.push({name:'home'}),exitDescription()">
       exit
     </button>
-    <div class="wrapper">
-          <input type="text" class="change_input" disabled v-model="usrDescription.id">
-      <hr>
-          <span>First name: </span><input type="text" class="change_input" disabled v-model="usrDescription.first_name">
-      <hr>
-          <span>Last name: </span><input type="text" class="change_input" disabled v-model="usrDescription.last_name">
-      <hr>
-          <span>Email: </span><input type="text" class="change_input email" disabled v-model="usrDescription.email">
-      <hr>
-          <input type="image" :src="usrDescription.avatar" alt="" class="user_description_avatar">
-    <div class="change_buttons">
-        <MyButton class="change_buttons_btn" v-if="!showChangeButton" @click="changeDescription">Change data user</MyButton>
-        <MyButton class="change_buttons_btn save_btn" v-if="showChangeButton" @click="saveChangeDescription">Save data user</MyButton>
-        <MyButton class="change_buttons_btn" v-if="showChangeButton" @click="exitChangeDescription">Cancel</MyButton>
-    </div>
-    </div>
+      <div class="wrapper">
+            <input type="text" class="change_input" disabled v-model="usrDescription.id">
+        <hr>
+            <span>First name: </span><input type="text" class="change_input" disabled v-model="usrDescription.first_name">
+        <hr>
+            <span>Last name: </span><input type="text" class="change_input" disabled v-model="usrDescription.last_name">
+        <hr>
+            <span>Email: </span><input type="text" class="change_input email" disabled v-model="usrDescription.email">
+        <hr>
+            <input type="image" :src="usrDescription.avatar" alt="" class="user_description_avatar">
+            <div class="change_buttons">
+                <MyButton class="change_buttons_btn" v-if="!showChangeButton" @click="changeDescription">Change data user</MyButton>
+                <MyButton class="change_buttons_btn save_btn" v-if="showChangeButton" @click="saveChangeDescription">Save data user</MyButton>
+                <MyButton class="change_buttons_btn" v-if="showChangeButton" @click="exitChangeDescription">Cancel</MyButton>
+            </div>
+      </div>
   </div>
 </template>
 
@@ -38,9 +38,6 @@ export default {
   },methods:{
     changeDescription(){
       this.showChangeButton=!this.showChangeButton
-      // document.querySelectorAll(".change_input").forEach((i)=>i.disabled=false)
-      // localStorage.setItem('UsersList')
-      // console.log(this.usrDescription)
       this.revertOldName=this.usrDescription.first_name
       this.revertOldLastName=this.usrDescription.last_name
       this.revertOldEmail=this.usrDescription.email
@@ -59,12 +56,8 @@ export default {
         inp.style.outline="none"
         inp.style.textShadow="1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff";
         inp.style.color="black"
-        // console.log(this.usrDescription)
-        // this.$emit('usrChanged',this.usrDescription)
-        // localStorage.setItem[this.usrDescription.id]('UsersList',JSON.stringify(this.usrDescription))
       })
       this.showChangeButton=false
-      // this.$emit('saveChange',this.usrDescription)
       localStorage.setItem('UsersList', JSON.stringify(this.localStorageList))
     },
     exitChangeDescription(){
@@ -74,6 +67,7 @@ export default {
         inp.style.textShadow="1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff";
         inp.style.color="black"
       })
+
       this.showChangeButton=false
       this.usrDescription.first_name=this.revertOldName
       this.usrDescription.last_name=this.revertOldLastName
@@ -81,9 +75,7 @@ export default {
       this.usrDescription.id=this.revertOldId
 
 
-      // this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
       localStorage.setItem('UsersList', JSON.stringify(this.localStorageList))
-      // this.usrDescription=this.userDescription
     },
     exitDescription(){
       if(this.showChangeButton){
@@ -142,14 +134,12 @@ export default {
   box-shadow: 0px 1px maroon;
 }
 .user_description_avatar{
-  /*width: 100%;*/
   width: 40%;
   position: absolute;
   top: 10%;
   right: 10%;
   z-index: -10;
   border-radius: 200px;
-  /*min-height: 100%;*/
 }
 .change_input{
   margin-top: 15px;
@@ -212,5 +202,6 @@ hr{
     width: 70%;
   }
 }
+
 </style>
 

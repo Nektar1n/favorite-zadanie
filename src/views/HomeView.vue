@@ -2,32 +2,26 @@
   <div class="home">
     <MyButton id="upd_btn" @click="updateUsers">REFRESH LIST USERS</MyButton>
     <h1>All USERS</h1>
-    <div class="all_users">
-      <div class="list_item" v-for="user in localStorageList" :key="user.id" @click="showerDescription(user)">
-        <MyButton @click.stop="deleteUser(user)">Delete</MyButton>
-        <h1>{{user.first_name}}</h1>
-        <p>{{user.last_name}}</p>
-        <img class="avatar_item" :src='user.avatar' alt="">
+      <div class="all_users">
+        <TransitionGroup name="list">
+          <div class="list_item" v-for="user in localStorageList" :key="user" @click="showerDescription(user)">
+            <MyButton @click.stop="deleteUser(user)">Delete</MyButton>
+            <h1>{{user.first_name}}</h1>
+            <p>{{user.last_name}}</p>
+            <img class="avatar_item" :src='user.avatar' alt="">
+          </div>
+        </TransitionGroup>
       </div>
-    </div>
-    <user-description
-        v-if="showDescription"
-        @exitDescription="exitDescription"
-        :localStorageList="localStorageList"
-        :userDescription="userDescription"
-        @cancelChange="cancelChange"
-    >
-<!--      <template v-slot:id>{{userDescription.id}}</template>-->
-<!--      <template v-slot:name>{{userDescription.first_name}}</template>-->
-<!--      <template v-slot:last_name>{{userDescription.last_name}}</template>-->
-<!--      <template v-slot:email>{{userDescription.email}}</template>-->
-<!--      <template v-slot:city>{{userDescription.address.city}}</template>-->
-<!--      <template v-slot:zipcode>{{userDescription.address.zipcode}}</template>-->
-<!--      <template v-slot:name_company>{{userDescription.company.name}}</template>-->
-<!--      <template v-slot:catch_phrase>{{userDescription.company.catchPhrase}}</template>-->
-<!--      <template v-slot:phone>{{userDescription.phone}}</template>-->
-<!--      <template v-slot:website>{{userDescription.website}}</template>-->
-    </user-description>
+      <Transition name="modal">
+        <user-description
+            v-if="showDescription"
+            @exitDescription="exitDescription"
+            :localStorageList="localStorageList"
+            :userDescription="userDescription"
+            @cancelChange="cancelChange"
+        >
+        </user-description>
+      </Transition>
   </div>
 </template>
 
@@ -48,11 +42,9 @@ export default {
     return{
       showDescription: false,
       userDescription:null,
-      // userName:'',
       filteredList:[],
       localStorageList:null,
       revertChange:null,
-      originalListUsers:null
     }
   },
   computed: mapGetters(['allUsers','allCount',]),
@@ -62,47 +54,33 @@ export default {
     },
     showerDescription(user){
       this.showDescription=true
-      // this.userName=user.name
       this.userDescription=user
       this.$router.push({name:'user',params:{id:user.id}});
     },
     deleteUser(user){
-      // console.log(user)
       const index=this.allUsers.indexOf(user)
-      // console.log(index)
-      // this.localStorageList.splice(index,1)
       this.localStorageList=this.localStorageList.filter(u=>u!==user)
       localStorage.setItem('UsersList',JSON.stringify(this.localStorageList))
     },
     updateUsers(){
-      // location.reload ()
       localStorage.setItem('UsersList',JSON.stringify(this.allUsers))
       this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
     },
-    // usrChanged(usrDescription){
-    //   console.log(usrDescription)
-    // }
     cancelChange(revertChange){
-      // this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
       this.revertChange=revertChange
     },
   },
   mounted() {
     this.fetchUsers(2)
-    // console.log(...JSON.parse(localStorage.getItem('UsersList')))
-    // // this.allUsers=JSON.parse(localStorage.getItem('UsersList'))
-    // console.log(this.allUsers)
     this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
-    // console.log(JSON.parse(localStorage.getItem('UsersList')))
-
-    // console.log(this.localStorageList)
   },
 }
 </script>
 
 <style>
 .home{
-  margin-top: 90px;
+  margin: 90px auto;
+  width: 90%;
 }
 .all_users{
   display: flex;
@@ -145,10 +123,36 @@ export default {
   transition:all .4s ease;
   border-radius: 10px;
 }
-/*.avatar_item:hover{*/
-/*  border-radius: 20px;*/
-/*}*/
 .list_item:hover .avatar_item{
   border-radius: 200px;
+}
+
+.modal-enter-active{
+  transition:all .3s ease ;
+}
+.modal-leave-active{
+  transition:all .2s ease ;
+}
+.modal-enter-from, .modal-leave-to{
+  /*transform: scale(5) !important;*/
+  opacity: 0;
+}
+
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+
+.list-leave-active {
+  position: absolute;
 }
 </style>
