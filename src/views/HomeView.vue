@@ -94,6 +94,7 @@ export default {
     // console.log(this.allUsers)
     this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
     // console.log(JSON.parse(localStorage.getItem('UsersList')))
+
     // console.log(this.localStorageList)
   },
 }
