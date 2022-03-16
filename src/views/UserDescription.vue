@@ -3,15 +3,15 @@
     <button class="ext_btn" @click="$emit('exitDescription'),$router.push({name:'home'})">
       exit
     </button>
-          <h1>ID: {{userDescription.id}}
-          <input type="text" disabled :value="userDescription.first_name"></h1>
-          <h2>{{userDescription.last_name}}</h2>
-          <h2>EMAIL: {{userDescription.email}}</h2>
-          <img :src="userDescription.avatar" alt="" class="user_description_avatar">
+          ID: <input type="text" class="change_input" disabled v-model="usrDescription.id">
+          First name: <input type="text" class="change_input" disabled v-model="usrDescription.first_name">
+          Last name:<input type="text" class="change_input" disabled v-model="usrDescription.last_name">
+          Email: <input type="text" class="change_input" disabled v-model="usrDescription.email">
+          <input type="image" :src="usrDescription.avatar" alt="" class="user_description_avatar">
     <div class="change_buttons">
-        <MyButton class="change_buttons_btn" v-if="!showChangeButton" @click="showChangeButton=!showChangeButton">Change data user</MyButton>
-        <MyButton class="change_buttons_btn save_btn" v-if="showChangeButton">Save data user</MyButton>
-        <MyButton class="change_buttons_btn" v-if="showChangeButton" @click="showChangeButton=!showChangeButton">Cancel</MyButton>
+        <MyButton class="change_buttons_btn" v-if="!showChangeButton" @click="changeDescription">Change data user</MyButton>
+        <MyButton class="change_buttons_btn save_btn" v-if="showChangeButton" @click="saveChangeDescription">Save data user</MyButton>
+        <MyButton class="change_buttons_btn" v-if="showChangeButton" @click="exitChangeDescription">Cancel</MyButton>
     </div>
   </div>
 </template>
@@ -22,13 +22,70 @@ export default {
   name: "UserDescription",
   data(){
     return{
-      showChangeButton:false
+      showChangeButton:false,
+      usrDescription:this.userDescription,
+      revertOldName:null,
+      revertOldLastName:null,
+      revertOldEmail:null,
+      revertOldId:null
     }
+  },methods:{
+    changeDescription(){
+      this.showChangeButton=!this.showChangeButton
+      // document.querySelectorAll(".change_input").forEach((i)=>i.disabled=false)
+      // localStorage.setItem('UsersList')
+      // console.log(this.usrDescription)
+      this.revertOldName=this.usrDescription.first_name
+      this.revertOldLastName=this.usrDescription.last_name
+      this.revertOldEmail=this.usrDescription.email
+      this.revertOldId=this.usrDescription.id
+
+      document.querySelectorAll(".change_input").forEach((inp)=>{
+        inp.disabled=false
+        inp.style.textShadow="none"
+        inp.style.outline='2px solid black'
+        inp.style.color="white"
+      })
+    },
+    saveChangeDescription(){
+      document.querySelectorAll(".change_input").forEach((inp)=>{
+        inp.disabled=true
+        inp.style.outline="none"
+        inp.style.textShadow="1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff";
+        inp.style.color="black"
+        // console.log(this.usrDescription)
+        // this.$emit('usrChanged',this.usrDescription)
+        // localStorage.setItem[this.usrDescription.id]('UsersList',JSON.stringify(this.usrDescription))
+      })
+      this.showChangeButton=false
+      // this.$emit('saveChange',this.usrDescription)
+      localStorage.setItem('UsersList', JSON.stringify(this.localStorageList))
+    },
+    exitChangeDescription(){
+      document.querySelectorAll(".change_input").forEach((inp)=>{
+        inp.disabled=true
+        inp.style.outline="none"
+        inp.style.textShadow="1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff";
+        inp.style.color="black"
+      })
+      this.showChangeButton=false
+      this.usrDescription.first_name=this.revertOldName
+      this.usrDescription.last_name=this.revertOldLastName
+      this.usrDescription.email=this.revertOldEmail
+      this.usrDescription.id=this.revertOldId
+
+
+      // this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
+      localStorage.setItem('UsersList', JSON.stringify(this.localStorageList))
+      // this.usrDescription=this.userDescription
+    }
+
   },
   components: {MyButton},
   props:{
-    userDescription:Object
-  }
+    userDescription:Object,
+    localStorageList:Object
+  },
 }
 
 </script>
@@ -72,13 +129,20 @@ export default {
   width: 80%;
   position: absolute;
   top: 10%;
+  left: 7%;
   z-index: -10;
 }
-input{
-  font-size: 40px;
+.change_input{
+  margin-top: 15px;
+  font-size: 32px;
+  font-weight: bold;
   background: none;
   border: none;
-  text-decoration: black;
+  width: 90%;
+  color: black;
+  text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  padding: 10px;
+  transition: all .2s ease;
 }
 .change_buttons{
   display: flex;
@@ -86,11 +150,16 @@ input{
   width: 30%;
 }
 .change_buttons_btn{
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   height: 40px;
 }
 .save_btn{
-  margin-top: 60px;
+  margin-top: 40px;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }
 </style>
 

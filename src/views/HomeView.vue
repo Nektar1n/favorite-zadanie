@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <MyButton id="upd_btn" @click="updateUsers">UPDATE LIST USERS</MyButton>
+    <MyButton id="upd_btn" @click="updateUsers">REFRESH LIST USERS</MyButton>
     <h1>All USERS</h1>
     <div class="all_users">
       <div class="list_item" v-for="user in localStorageList" :key="user.id" @click="showerDescription(user)">
@@ -10,7 +10,13 @@
         <img class="avatar_item" :src='user.avatar' alt="">
       </div>
     </div>
-    <user-description v-if="showDescription" @exitDescription="exitDescription" :userDescription="userDescription">
+    <user-description
+        v-if="showDescription"
+        @exitDescription="exitDescription"
+        :localStorageList="localStorageList"
+        :userDescription="userDescription"
+        @cancelChange="cancelChange"
+    >
 <!--      <template v-slot:id>{{userDescription.id}}</template>-->
 <!--      <template v-slot:name>{{userDescription.first_name}}</template>-->
 <!--      <template v-slot:last_name>{{userDescription.last_name}}</template>-->
@@ -44,7 +50,8 @@ export default {
       userDescription:null,
       // userName:'',
       filteredList:[],
-      localStorageList:null
+      localStorageList:null,
+      revertChange:null
     }
   },
   computed: mapGetters(['allUsers','allCount']),
@@ -65,12 +72,18 @@ export default {
       // this.localStorageList.splice(index,1)
       this.localStorageList=this.localStorageList.filter(u=>u!==user)
       localStorage.setItem('UsersList',JSON.stringify(this.localStorageList))
-      console.log(this.allUsers)
     },
     updateUsers(){
       localStorage.setItem('UsersList',JSON.stringify(this.allUsers))
       this.localStorageList=this.allUsers
-    }
+    },
+    // usrChanged(usrDescription){
+    //   console.log(usrDescription)
+    // }
+    cancelChange(revertChange){
+      // this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
+      this.revertChange=revertChange
+    },
   },
   mounted() {
     this.fetchUsers(2)
@@ -78,7 +91,7 @@ export default {
     // // this.allUsers=JSON.parse(localStorage.getItem('UsersList'))
     // console.log(this.allUsers)
     this.localStorageList=JSON.parse(localStorage.getItem('UsersList'))
-    console.log(JSON.parse(localStorage.getItem('UsersList')))
+    // console.log(JSON.parse(localStorage.getItem('UsersList')))
     // console.log(this.localStorageList)
   },
 }
